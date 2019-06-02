@@ -22,14 +22,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Chamando a atividade ListaAtividades
-    public void AcaoLista (View view) {
-        Intent intentLista = new Intent(this, ListaAtividades.class);
+    public void buscaAtividade(View view) {
+        Intent intentLista = new Intent(this, BuscaAtividade.class);
         startActivity(intentLista);
     }
 
     // Chamando a atividade DadosAtividades
-    public void AcaoDados (View view) {
-        Intent intentDados = new Intent(this, DadosAtividades.class);
+    public void loginProfessor (View view) {
+        Intent intentDados = new Intent(this, LoginProfessor.class);
         startActivity(intentDados);
     }
 }

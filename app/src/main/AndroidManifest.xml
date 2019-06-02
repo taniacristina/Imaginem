@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DadosAtividades"></activity>
+        <activity android:name=".LoginProfessor"></activity>
+        <activity android:name=".BuscaAtividade" />
+        <activity android:name=".DadosAtividades" />
         <activity android:name=".ListaAtividades" />
         <activity android:name=".Questoes" />
         <activity android:name=".CadastroAtividade" />
