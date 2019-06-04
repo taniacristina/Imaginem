@@ -1,6 +1,7 @@
 package com.example.imaginem;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -33,7 +34,6 @@ public class CriaBanco extends SQLiteOpenHelper {
                 + SENHA + " text"
                 + ")";
         db.execSQL(sql);
-        Log.d("I","Criei o banco");
 
     }
 
@@ -42,4 +42,15 @@ public class CriaBanco extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABELA);
         onCreate(db);
     }
+
+    public String validaLogin(String usuarioLogin, String senhaLogin) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM professores WHERE usuario=? AND senha=?",new String[]{usuarioLogin,senhaLogin});
+        if(c.getCount() > 0) {
+            return "OK";
+        }
+        return "Erro";
+    }
+
+
 }

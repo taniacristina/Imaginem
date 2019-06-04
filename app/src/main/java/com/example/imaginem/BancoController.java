@@ -37,8 +37,5 @@ public class BancoController {
         }
     }
 
-    public Cursor carregaDados(){
-
-    }
 
 }
