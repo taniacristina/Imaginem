@@ -15,10 +15,11 @@ public class CadastroAtividade extends AppCompatActivity {
         setContentView(R.layout.activity_cadastro_atividade);
     }
 
-    // Chamando a função send do botão
+    // Chamando a função send do botão para fazer para fazer o cadastro da atividade
     public void sendMessage(View view) {
         BancoController banco = new BancoController(getBaseContext());
 
+        // Recebe os valores digitados
         EditText titulo = (EditText)findViewById(R.id.editText5);
         EditText descricao = (EditText)findViewById(R.id.editText9);
 
@@ -27,6 +28,7 @@ public class CadastroAtividade extends AppCompatActivity {
 
         String resultado;
 
+        // Chamando a função de inserção da atividade
         resultado = banco.insereAtividade(tituloString,descricaoString);
 
         if(resultado.equals("Registro Inserido com sucesso")) {

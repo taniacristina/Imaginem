@@ -8,6 +8,7 @@ import android.util.Log;
 
 public class CriaBanco extends SQLiteOpenHelper {
 
+    // Tabela professores
     public static final String NOME_BANCO = "imaginem.db";
     public static final String TABELA = "professores";
     public static final String ID = "_id";
@@ -16,10 +17,16 @@ public class CriaBanco extends SQLiteOpenHelper {
     public static final String USUARIO = "usuario";
     public static final String SENHA = "senha";
 
+    // Tabela atividades
     public static final String TABELA_atv = "atividades";
     public static final String TITULO = "titulo";
     public static final String DESCRICAO = "descricao";
     public static final String ID_PRO = "_idPro";
+
+    // Tabela imagens
+    public static final String TABELA_img = "imagem";
+    public static final String ID_IMG = "_idImg";
+    public static final String IMAGEM = "imagem";
 
     public static final int VERSAO = 2;
 
@@ -32,6 +39,7 @@ public class CriaBanco extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // Tabela de professores
         String sql = "CREATE TABLE "+TABELA+"("
                 + ID + " integer primary key autoincrement,"
                 + NOME + " text,"
@@ -50,12 +58,19 @@ public class CriaBanco extends SQLiteOpenHelper {
                 + ")";
         db.execSQL(sql_atv);
 
+        // Criando tabela de Imagens
+        String sql_img = "CREATE TABLE "+TABELA_img+"("
+                + ID_IMG + " integer primary key autoincrement,"
+                + IMAGEM + " blob"
+                + ")";
+        db.execSQL(sql_img);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABELA);
         db.execSQL("DROP TABLE IF EXISTS " + TABELA_atv);
+        db.execSQL("DROP TABLE IF EXISTS " + TABELA_img);
         onCreate(db);
     }
 
