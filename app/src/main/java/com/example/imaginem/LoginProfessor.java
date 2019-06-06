@@ -1,6 +1,7 @@
 package com.example.imaginem;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,7 +21,7 @@ public class LoginProfessor extends AppCompatActivity {
 
         Button btn_Entrar = (Button) findViewById(R.id.button5);
         final EditText usuario, senha;
-
+        final Bundle bundle = new Bundle();
         banco = new CriaBanco(this);
 
         usuario = (EditText)findViewById(R.id.editText7);
@@ -40,9 +41,13 @@ public class LoginProfessor extends AppCompatActivity {
                     String res = banco.validaLogin(usuarioString, senhaString);
                     if(res.equals("OK")) {
                         Toast.makeText(LoginProfessor.this, "login efetuado com sucesso",Toast.LENGTH_SHORT).show();
+
                         String idProfessor = banco.idProfessor(usuarioString);
+                        bundle.putString("idProfessor",idProfessor);
                         Intent intentAtividades = new Intent(LoginProfessor.this, ListaAtividades.class);
+                        intentAtividades.putExtras(bundle);
                         startActivity(intentAtividades);
+
                     } else {
                         Toast.makeText(LoginProfessor.this, "login não efetuado",Toast.LENGTH_SHORT).show();
                     }

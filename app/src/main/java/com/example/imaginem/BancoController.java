@@ -37,4 +37,23 @@ public class BancoController {
         }
     }
 
+    public String insereAtividade(String titulo, String descricao) {
+        ContentValues valores;
+        long resultado;
+
+        db = banco.getWritableDatabase();
+        valores = new ContentValues();
+        valores.put(CriaBanco.TITULO, titulo);
+        valores.put(CriaBanco.DESCRICAO, descricao);
+
+        resultado = db.insert(CriaBanco.TABELA_atv, null, valores);
+        db.close();
+
+        if(resultado == -1){
+            return "Erro ao inserir registro";
+        } else {
+            return "Registro Inserido com sucesso";
+        }
+    }
+
 }

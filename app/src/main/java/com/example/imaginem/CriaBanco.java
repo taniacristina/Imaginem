@@ -19,6 +19,7 @@ public class CriaBanco extends SQLiteOpenHelper {
     public static final String TABELA_atv = "atividades";
     public static final String TITULO = "titulo";
     public static final String DESCRICAO = "descricao";
+    public static final String ID_PRO = "_idPro";
 
     public static final int VERSAO = 2;
 
@@ -44,7 +45,8 @@ public class CriaBanco extends SQLiteOpenHelper {
         String sql_atv = "CREATE TABLE "+TABELA_atv+"("
                 + ID + " integer primary key autoincrement,"
                 + TITULO + " text,"
-                + DESCRICAO + " text"
+                + DESCRICAO + " text,"
+                + ID_PRO + " text"
                 + ")";
         db.execSQL(sql_atv);
 
@@ -73,11 +75,10 @@ public class CriaBanco extends SQLiteOpenHelper {
         Cursor c = db.rawQuery("SELECT _id FROM professores WHERE usuario=?",new String[]{usuario});
         if(c.getCount() > 0) {
             if(c.moveToFirst()) {
-                System.out.println("Valor usuario = "+c.getString(c.getColumnIndexOrThrow("_id")));
+//                System.out.println("Valor usuario = "+c.getString(c.getColumnIndexOrThrow("_id")));
+                return c.getString(c.getColumnIndexOrThrow("_id"));
             }
-            return c.toString();
         }
-        System.out.println("Valor usuario"+c.getString(c.getColumnIndexOrThrow("_id")));
         return "Erro";
     }
 
