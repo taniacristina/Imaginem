@@ -16,8 +16,8 @@ public class LoginProfessor extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_login_professor);
+
         Button btn_Entrar = (Button) findViewById(R.id.button5);
         final EditText usuario, senha;
 
@@ -32,17 +32,15 @@ public class LoginProfessor extends AppCompatActivity {
                 String usuarioString = usuario.getText().toString();
                 String senhaString = senha.getText().toString();
 
-                //System.out.println("Usuario = " +usuarioString + "Senha = " +senhaString);
-
                 if(usuarioString.equals("")) {
                     Toast.makeText(LoginProfessor.this, "Usuario não inserido",Toast.LENGTH_SHORT).show();
                 } else if(senhaString.equals("")){
                     Toast.makeText(LoginProfessor.this, "Senha não inserida",Toast.LENGTH_SHORT).show();
                 } else {
-                    // Tudo ok
                     String res = banco.validaLogin(usuarioString, senhaString);
                     if(res.equals("OK")) {
                         Toast.makeText(LoginProfessor.this, "login efetuado com sucesso",Toast.LENGTH_SHORT).show();
+                        String idProfessor = banco.idProfessor(usuarioString);
                         Intent intentAtividades = new Intent(LoginProfessor.this, ListaAtividades.class);
                         startActivity(intentAtividades);
                     } else {
