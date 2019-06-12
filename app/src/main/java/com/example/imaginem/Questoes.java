@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -15,48 +16,72 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.io.ByteArrayOutputStream;
 
 public class Questoes extends AppCompatActivity {
 
-    public static final int IMAGEM_INTERNA = 1;
-    public static final int PERMISSAO_REQUEST = 2;
+    private ImageView imagem;
+    private Bitmap imageBitmap;
+    private final int TIRAR_FOTO = 1;
 
-    ImageView imgQuestao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questoes);
-        imgQuestao = (ImageView)findViewById(R.id.imageView);
-    }
+        Bundle extras = getIntent().getExtras();
+        String idProfessor;
 
-    public void pegarImagem(View view) {
-        // Chama todas as aplicações
-        Intent intentImagem = new Intent(Intent.ACTION_GET_CONTENT);
-        intentImagem.setType("image/*");
-        startActivityForResult(intentImagem, IMAGEM_INTERNA);
-    }
+        // Recuperando o ID do professor
+        if(extras != null) {
+            idProfessor = extras.getString("idProfessor");
+        }
 
-    // Checando resposta
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent){
-        //Se houver aplicações com resposta
-        if (requestCode == IMAGEM_INTERNA){
-            //Se o processamento foi OK
-            if (resultCode == RESULT_OK){
-                Uri imagemSelecionada = intent.getData(); //Acessa recurso de imagem da aplicação
-
-                String[] colunas = {MediaStore.Images.Media.DATA};
-
-                Cursor cursor = getContentResolver().query(imagemSelecionada, colunas, null, null, null);
-                cursor.moveToFirst();
-
-                int indexColuna = cursor.getColumnIndex(colunas[0]);
-                String pathImg = cursor.getString(indexColuna); //caminho da imagem
-                cursor.close();
-
-                Bitmap bitmap = BitmapFactory.decodeFile(pathImg);
-                imgQuestao.setImageBitmap(bitmap);
+        // Recuperando o imageview e acionando a ação de galeria
+        imagem = findViewById(R.id.imageView);
+        imagem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, TIRAR_FOTO);
             }
+        });
+    }
+
+    public void inserirImagem(View view) {
+        String resultado;
+        BancoController banco = new BancoController(getBaseContext());
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        imageBitmap = ((BitmapDrawable)imagem.getDrawable()).getBitmap();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte imagemBytes[] = stream.toByteArray();
+
+        // Chamando a função de inserção da imagem
+        resultado = banco.insereImagens(imagemBytes);
+        if(resultado.equals("Registro Inserido com sucesso")) {
+            Toast.makeText(getApplicationContext(),resultado,Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(),resultado,Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == TIRAR_FOTO && resultCode == RESULT_OK) {
+            Uri selectedImage = intent.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+            imagem.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         }
     }
 

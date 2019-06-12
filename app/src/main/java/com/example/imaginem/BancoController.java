@@ -37,7 +37,7 @@ public class BancoController {
         }
     }
 
-    public String insereAtividade(String titulo, String descricao) {
+    public String insereAtividade(String titulo, String descricao, String id_pro) {
         ContentValues valores;
         long resultado;
 
@@ -45,7 +45,7 @@ public class BancoController {
         valores = new ContentValues();
         valores.put(CriaBanco.TITULO, titulo);
         valores.put(CriaBanco.DESCRICAO, descricao);
-
+        valores.put(CriaBanco.ID_PRO, id_pro);
         resultado = db.insert(CriaBanco.TABELA_atv, null, valores);
         db.close();
 
@@ -54,6 +54,28 @@ public class BancoController {
         } else {
             return "Registro Inserido com sucesso";
         }
+    }
+
+    public String insereImagens(byte[] imagem) {
+        ContentValues valores;
+        long resultado;
+        db = banco.getWritableDatabase();
+
+        valores = new ContentValues();
+        valores.put(CriaBanco.IMAGEM, imagem);
+        resultado = db.insert(CriaBanco.TABELA_img, null, valores);
+        db.close();
+
+        if(resultado == -1){
+            return "Erro ao inserir registro";
+        } else {
+            return "Registro Inserido com sucesso";
+        }
+
+    }
+
+    public String inseriImagem() {
+        return "";
     }
 
 }

@@ -18,7 +18,15 @@ public class CadastroAtividade extends AppCompatActivity {
     // Chamando a função send do botão para fazer para fazer o cadastro da atividade
     public void sendMessage(View view) {
         BancoController banco = new BancoController(getBaseContext());
-
+        String idProfessor = null;
+        
+        // Recebendo o id do professor
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            idProfessor = extras.getString("idProfessor");
+            extras.putString("idProfessor",idProfessor);
+            //Toast.makeText(CadastroAtividade.this, idProfessor,Toast.LENGTH_SHORT).show();
+        }
         // Recebe os valores digitados
         EditText titulo = (EditText)findViewById(R.id.editText5);
         EditText descricao = (EditText)findViewById(R.id.editText9);
@@ -29,11 +37,12 @@ public class CadastroAtividade extends AppCompatActivity {
         String resultado;
 
         // Chamando a função de inserção da atividade
-        resultado = banco.insereAtividade(tituloString,descricaoString);
+        resultado = banco.insereAtividade(tituloString,descricaoString,idProfessor);
 
         if(resultado.equals("Registro Inserido com sucesso")) {
             Toast.makeText(getApplicationContext(),resultado,Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, Questoes.class);
+            intent.putExtras(extras);
             startActivity(intent);
         } else {
             Toast.makeText(getApplicationContext(),resultado,Toast.LENGTH_LONG).show();

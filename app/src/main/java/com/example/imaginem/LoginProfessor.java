@@ -39,6 +39,7 @@ public class LoginProfessor extends AppCompatActivity {
                     Toast.makeText(LoginProfessor.this, "Senha não inserida",Toast.LENGTH_SHORT).show();
                 } else {
                     String res = banco.validaLogin(usuarioString, senhaString);
+
                     if(res.equals("OK")) {
                         Toast.makeText(LoginProfessor.this, "login efetuado com sucesso",Toast.LENGTH_SHORT).show();
 

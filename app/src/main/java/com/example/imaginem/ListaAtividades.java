@@ -17,11 +17,12 @@ public class ListaAtividades extends AppCompatActivity {
     public void sendMessage(View view) {
         Intent intent = new Intent(this, CadastroAtividade.class);
         Bundle extras = getIntent().getExtras();
+        Bundle bundle = new Bundle();
 
         if(extras != null) {
             String idProfessor = extras.getString("idProfessor");
-            extras.putString("idProfessor",idProfessor);
-            intent.putExtras(extras);
+            bundle.putString("idProfessor",idProfessor);
+            intent.putExtras(bundle);
             startActivity(intent);
             //Toast.makeText(ListaAtividades.this, idProfessor,Toast.LENGTH_SHORT).show();
         }
