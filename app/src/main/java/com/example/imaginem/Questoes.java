@@ -26,13 +26,17 @@ public class Questoes extends AppCompatActivity {
     private Bitmap imageBitmap;
     private final int TIRAR_FOTO = 1;
     byte imagemBytes[];
+    long resultado;
+    long idImg;
+    int idAtv;
+    String idAtvString;
+    String idProfessor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questoes);
         Bundle extras = getIntent().getExtras();
-        String idProfessor;
 
         // Recuperando o ID do professor
         if(extras != null) {
@@ -51,29 +55,107 @@ public class Questoes extends AppCompatActivity {
     }
 
     public void inserirImagem(View view) {
-        String resultado;
         BancoController banco = new BancoController(getBaseContext());
+        CriaBanco db = new CriaBanco(getBaseContext());
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         imageBitmap = ((BitmapDrawable)imagem.getDrawable()).getBitmap();
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         imagemBytes = stream.toByteArray();
 
+        if(db.idAtividade(idProfessor).equals("erro")) {
+
+        } else {
+            idAtvString = db.idAtividade(idProfessor);
+        }
+
+        idAtv = Integer.parseInt(idAtvString);
+
         // Chamando a função de inserção da imagem
         resultado = banco.insereImagens(imagemBytes);
-        if(resultado.equals("Registro Inserido com sucesso")) {
-            Toast.makeText(getApplicationContext(),resultado,Toast.LENGTH_LONG).show();
+        idImg = resultado;
+        if(resultado == -1) {
+            Toast.makeText(getApplicationContext(),"Erro ao inserir registro",Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getApplicationContext(),resultado,Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Registro Inserido com sucesso",Toast.LENGTH_LONG).show();
         }
 
     }
 
     public void inserirQuestao(View view) {
-        CriaBanco banco = new CriaBanco(this);
-        //int idImg = banco.idImagem();
+        BancoController banco = new BancoController(getBaseContext());
+        long resultadoQuestao;
+        // Recebe os valores digitados
+        EditText palavra1 = (EditText)findViewById(R.id.editText);
+        EditText descricao1 = (EditText)findViewById(R.id.editText2);
+        EditText palavra2 = (EditText)findViewById(R.id.editText3);
+        EditText descricao2 = (EditText)findViewById(R.id.editText4);
+        EditText palavra3 = (EditText)findViewById(R.id.editText6);
+        EditText descricao3 = (EditText)findViewById(R.id.editText8);
+
+        String palavra1String = palavra1.getText().toString();
+        String descricao1String = descricao1.getText().toString();
+        String palavra2String = palavra2.getText().toString();
+        String descricao2String = descricao2.getText().toString();
+        String palavra3String = palavra3.getText().toString();
+        String descricao3String = descricao3.getText().toString();
+
+        resultadoQuestao = banco.inserePalavras(resultado, palavra1String,descricao1String, palavra2String,descricao2String, palavra3String, descricao3String);
+
+        if(resultadoQuestao == -1) {
+            Toast.makeText(getApplicationContext(),"Erro ao inserir registro",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(),"Registro Inserido com sucesso",Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, ListaAtividades.class);
+            Bundle extras = getIntent().getExtras();
+            Bundle bundle = new Bundle();
+
+            if(extras != null) {
+                bundle.putString("idProfessor",idProfessor);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                //Toast.makeText(Questoes.this, idProfessor,Toast.LENGTH_SHORT).show();
+            }
+            startActivity(intent);
+        }
+
     }
 
     public void proximaQuestao(View view) {
+        BancoController banco = new BancoController(getBaseContext());
+        long resultadoQuestao;
+        // Recebe os valores digitados
+        EditText palavra1 = (EditText)findViewById(R.id.editText);
+        EditText descricao1 = (EditText)findViewById(R.id.editText2);
+        EditText palavra2 = (EditText)findViewById(R.id.editText3);
+        EditText descricao2 = (EditText)findViewById(R.id.editText4);
+        EditText palavra3 = (EditText)findViewById(R.id.editText6);
+        EditText descricao3 = (EditText)findViewById(R.id.editText8);
+
+        String palavra1String = palavra1.getText().toString();
+        String descricao1String = descricao1.getText().toString();
+        String palavra2String = palavra2.getText().toString();
+        String descricao2String = descricao2.getText().toString();
+        String palavra3String = palavra3.getText().toString();
+        String descricao3String = descricao3.getText().toString();
+
+        resultadoQuestao = banco.inserePalavras(resultado, palavra1String,descricao1String, palavra2String,descricao2String, palavra3String, descricao3String);
+
+        if(resultadoQuestao == -1) {
+            Toast.makeText(getApplicationContext(),"Erro ao inserir registro",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(),"Registro Inserido com sucesso",Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, ListaAtividades.class);
+            Bundle extras = getIntent().getExtras();
+            Bundle bundle = new Bundle();
+
+            if(extras != null) {
+                bundle.putString("idProfessor",idProfessor);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                //Toast.makeText(Questoes.this, idProfessor,Toast.LENGTH_SHORT).show();
+            }
+            startActivity(intent);
+        }
 
     }
 

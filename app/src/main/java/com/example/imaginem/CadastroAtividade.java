@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class CadastroAtividade extends AppCompatActivity {
-
+    long idAtividade;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +25,6 @@ public class CadastroAtividade extends AppCompatActivity {
         if(extras != null) {
             idProfessor = extras.getString("idProfessor");
             extras.putString("idProfessor",idProfessor);
-            //Toast.makeText(CadastroAtividade.this, idProfessor,Toast.LENGTH_SHORT).show();
         }
 
         // Recebe os valores digitados
@@ -41,6 +40,8 @@ public class CadastroAtividade extends AppCompatActivity {
         resultado = banco.insereAtividade(tituloString,descricaoString,idProfessor);
 
         if(resultado.equals("Registro Inserido com sucesso")) {
+            Bundle bundle = new Bundle();
+            bundle.putString("idProfessor",idProfessor);
             Toast.makeText(getApplicationContext(),resultado,Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, Questoes.class);
             intent.putExtras(extras);

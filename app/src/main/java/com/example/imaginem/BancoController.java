@@ -2,10 +2,9 @@ package com.example.imaginem;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import com.example.imaginem.CriaBanco;
+
 
 public class BancoController {
 
@@ -56,22 +55,32 @@ public class BancoController {
         }
     }
 
-    public String insereImagens(byte[] imagem) {
+    public long insereImagens(byte[] imagem, int idAtv) {
         ContentValues valores;
         long resultado;
         db = banco.getWritableDatabase();
-
         valores = new ContentValues();
         valores.put(CriaBanco.IMAGEM, imagem);
         resultado = db.insert(CriaBanco.TABELA_img, null, valores);
         db.close();
+        return resultado;
+    }
 
-        if(resultado == -1){
-            return "Erro ao inserir registro";
-        } else {
-            return "Registro Inserido com sucesso";
-        }
-
+    public long inserePalavras(long idImg, String palavra1, String descricao1, String palavra2, String descricao2, String palavra3, String descricao3) {
+        long resultado;
+        ContentValues valores;
+        db = banco.getWritableDatabase();
+        valores = new ContentValues();
+        valores.put(CriaBanco.PALAVRA1, palavra1);
+        valores.put(CriaBanco.PALAVRA2, palavra2);
+        valores.put(CriaBanco.PALAVRA3, palavra3);
+        valores.put(CriaBanco.DESCRICAO1, descricao1);
+        valores.put(CriaBanco.DESCRICAO2, descricao2);
+        valores.put(CriaBanco.DESCRICAO3, descricao3);
+        valores.put(CriaBanco.ID_IMAGEM, idImg);
+        resultado = db.insert(CriaBanco.TABELA_QUESTAO, null, valores);
+        db.close();
+        return resultado;
     }
 
 }

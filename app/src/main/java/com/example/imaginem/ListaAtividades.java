@@ -12,6 +12,16 @@ public class ListaAtividades extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_atividades);
+
+        Bundle extras = getIntent().getExtras();
+        String idProfessor;
+
+        // Recuperando o ID do professor
+        if(extras != null) {
+            idProfessor = extras.getString("idProfessor");
+            //Toast.makeText(ListaAtividades.this, idProfessor,Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void sendMessage(View view) {

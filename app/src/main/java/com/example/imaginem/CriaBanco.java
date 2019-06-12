@@ -37,6 +37,8 @@ public class CriaBanco extends SQLiteOpenHelper {
     public static final String DESCRICAO1 = "descricao1";
     public static final String DESCRICAO2 = "descricao2";
     public static final String DESCRICAO3 = "descricao3";
+    public static final String ID_IMAGEM = "idImagem";
+
 
     // Tabela de relação entre atividade e questão
     public static final String TABELA_RELACAO = "relacao";
@@ -88,7 +90,7 @@ public class CriaBanco extends SQLiteOpenHelper {
                 + DESCRICAO1 + " text,"
                 + DESCRICAO2 + " text,"
                 + DESCRICAO3 + " text,"
-                + ID_IMG + " integer"
+                + ID_IMAGEM + " integer"
                 + ")";
         db.execSQL(sql_palavra);
 
@@ -131,10 +133,15 @@ public class CriaBanco extends SQLiteOpenHelper {
         return "Erro";
     }
 
-
-    // Método para recuperar o ID da imagem
-    public String idImagem() {
-        return "";
+    // Método para recuperar o ID da atividade
+    public String idAtividade(String usuario){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT _id FROM atividades WHERE _idPro=?",new String[]{usuario});
+        if(c.getCount() > 0) {
+            if(c.moveToFirst()) {
+                return c.getString(c.getColumnIndexOrThrow("_id"));
+            }
+        }
+        return "erro";
     }
-
 }
