@@ -27,6 +27,7 @@ public class CadastroAtividade extends AppCompatActivity {
             extras.putString("idProfessor",idProfessor);
             //Toast.makeText(CadastroAtividade.this, idProfessor,Toast.LENGTH_SHORT).show();
         }
+
         // Recebe os valores digitados
         EditText titulo = (EditText)findViewById(R.id.editText5);
         EditText descricao = (EditText)findViewById(R.id.editText9);

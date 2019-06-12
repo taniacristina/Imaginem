@@ -25,6 +25,7 @@ public class Questoes extends AppCompatActivity {
     private ImageView imagem;
     private Bitmap imageBitmap;
     private final int TIRAR_FOTO = 1;
+    byte imagemBytes[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class Questoes extends AppCompatActivity {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         imageBitmap = ((BitmapDrawable)imagem.getDrawable()).getBitmap();
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte imagemBytes[] = stream.toByteArray();
+        imagemBytes = stream.toByteArray();
 
         // Chamando a função de inserção da imagem
         resultado = banco.insereImagens(imagemBytes);
@@ -64,6 +65,15 @@ public class Questoes extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(),resultado,Toast.LENGTH_LONG).show();
         }
+
+    }
+
+    public void inserirQuestao(View view) {
+        CriaBanco banco = new CriaBanco(this);
+        //int idImg = banco.idImagem();
+    }
+
+    public void proximaQuestao(View view) {
 
     }
 

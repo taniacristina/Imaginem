@@ -28,6 +28,20 @@ public class CriaBanco extends SQLiteOpenHelper {
     public static final String ID_IMG = "_idImg";
     public static final String IMAGEM = "imagem";
 
+    // Tabela questão
+    public static final String TABELA_QUESTAO = "questao";
+    public static final String ID_QUESTAO = "_idQues";
+    public static final String PALAVRA1 = "palavra1";
+    public static final String PALAVRA2 = "palavra2";
+    public static final String PALAVRA3 = "palavra3";
+    public static final String DESCRICAO1 = "descricao1";
+    public static final String DESCRICAO2 = "descricao2";
+    public static final String DESCRICAO3 = "descricao3";
+
+    // Tabela de relação entre atividade e questão
+    public static final String TABELA_RELACAO = "relacao";
+    public static final String ID_REL = "_idRel";
+
     public static final int VERSAO = 2;
 
     private final Context contexto;
@@ -54,7 +68,7 @@ public class CriaBanco extends SQLiteOpenHelper {
                 + ID + " integer primary key autoincrement,"
                 + TITULO + " text,"
                 + DESCRICAO + " text,"
-                + ID_PRO + " text"
+                + ID_PRO + " integer"
                 + ")";
         db.execSQL(sql_atv);
 
@@ -64,6 +78,27 @@ public class CriaBanco extends SQLiteOpenHelper {
                 + IMAGEM + " blob"
                 + ")";
         db.execSQL(sql_img);
+
+        // Criando tabela de questões
+        String sql_palavra = "CREATE TABLE "+TABELA_QUESTAO+"("
+                + ID_QUESTAO + " integer primary key autoincrement,"
+                + PALAVRA1 + " text,"
+                + PALAVRA2 + " text,"
+                + PALAVRA3 + " text,"
+                + DESCRICAO1 + " text,"
+                + DESCRICAO2 + " text,"
+                + DESCRICAO3 + " text,"
+                + ID_IMG + " integer"
+                + ")";
+        db.execSQL(sql_palavra);
+
+        // Criando tabela de relação entre atividade e questão
+        String sql_relacao = "CREATE TABLE "+TABELA_RELACAO+"("
+                + ID_REL + " integer primary key autoincrement,"
+                + ID_IMG + " integer,"
+                + ID_QUESTAO + " integer"
+                + ")";
+        db.execSQL(sql_relacao);
     }
 
     @Override
@@ -90,12 +125,16 @@ public class CriaBanco extends SQLiteOpenHelper {
         Cursor c = db.rawQuery("SELECT _id FROM professores WHERE usuario=?",new String[]{usuario});
         if(c.getCount() > 0) {
             if(c.moveToFirst()) {
-//                System.out.println("Valor usuario = "+c.getString(c.getColumnIndexOrThrow("_id")));
                 return c.getString(c.getColumnIndexOrThrow("_id"));
             }
         }
         return "Erro";
     }
 
+
+    // Método para recuperar o ID da imagem
+    public String idImagem() {
+        return "";
+    }
 
 }

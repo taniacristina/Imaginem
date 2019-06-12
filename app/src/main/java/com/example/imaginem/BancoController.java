@@ -74,8 +74,4 @@ public class BancoController {
 
     }
 
-    public String inseriImagem() {
-        return "";
-    }
-
 }
