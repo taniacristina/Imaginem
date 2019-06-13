@@ -52,7 +52,7 @@ public class BancoController {
         return resultado;
     }
 
-    public long insereImagens(byte[] imagem) {
+    public long insereImagens(String imagem) {
         ContentValues valores;
         long resultado;
         db = banco.getWritableDatabase();
@@ -88,6 +88,20 @@ public class BancoController {
         valores.put(CriaBanco.ID_ATV, idAtv);
         valores.put(CriaBanco.ID_QUESTAO, idQuestao);
         resultado = db.insert(CriaBanco.TABELA_RELACAO, null, valores);
+        db.close();
+        return resultado;
+    }
+
+    public long insereErros(String erro1, String erro2, String idImg, String IdQues) {
+        long resultado;
+        ContentValues valores;
+        db = banco.getWritableDatabase();
+        valores = new ContentValues();
+        valores.put(CriaBanco.ERRO1, erro1);
+        valores.put(CriaBanco.ERRO2, erro2);
+        valores.put(CriaBanco.ID_IMAGEM, idImg);
+        valores.put(CriaBanco.ID_QUESTAO, IdQues);
+        resultado = db.insert(CriaBanco.TABELA_ERROS, null, valores);
         db.close();
         return resultado;
     }

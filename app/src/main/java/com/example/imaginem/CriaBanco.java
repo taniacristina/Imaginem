@@ -87,7 +87,7 @@ public class CriaBanco extends SQLiteOpenHelper {
         // Criando tabela de Imagens
         String sql_img = "CREATE TABLE "+TABELA_img+"("
                 + ID_IMG + " integer primary key autoincrement,"
-                + IMAGEM + " blob"
+                + IMAGEM + " text"
                 + ")";
         db.execSQL(sql_img);
 
@@ -154,6 +154,7 @@ public class CriaBanco extends SQLiteOpenHelper {
         return "Erro";
     }
 
+    // Método para recuperar informações da atividade
     public Cursor buscaAtividade(String id) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM atividades WHERE _idAtv=?",new String[]{id});
@@ -164,15 +165,52 @@ public class CriaBanco extends SQLiteOpenHelper {
         }
         return c;
     }
-//    // Método para recuperar o ID da atividade
-//    public String idAtividade(String usuario){
-//        SQLiteDatabase db = getReadableDatabase();
-//        Cursor c = db.rawQuery("SELECT _id FROM atividades WHERE _idPro=?",new String[]{usuario});
-//        if(c.getCount() > 0) {
-//            if(c.moveToFirst()) {
-//                return c.getString(c.getColumnIndexOrThrow("_id"));
-//            }
-//        }
-//        return "erro";
-//    }
+
+    public String idQuestao(String id) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT _idQues FROM relacao WHERE _idAtv=?",new String[]{id});
+        if(c.getCount() > 0) {
+            if(c.moveToFirst()) {
+                return c.getString(c.getColumnIndexOrThrow("_idQues"));
+            }
+        }
+        return "erro";
+    }
+
+    public String idImagem(String id) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT idImagem FROM questao WHERE _idQues=?",new String[]{id});
+        if(c.getCount() > 0) {
+            if(c.moveToFirst()) {
+                return c.getString(c.getColumnIndexOrThrow("idImagem"));
+            }
+        }
+        return "erro";
+    }
+
+
+    public String imagem(String id) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT imagem FROM imagem WHERE _idImg=?",new String[]{id});
+        if(c.getCount() > 0) {
+            if(c.moveToFirst()) {
+                return c.getString(c.getColumnIndexOrThrow("imagem"));
+            }
+        }
+        return "erro";
+    }
+
+    // Método para recuperar informações da atividade
+    public Cursor buscaPalavras(String id) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM questao WHERE _idQues=?",new String[]{id});
+        if(c.getCount() > 0) {
+            if(c.moveToFirst()) {
+                return c;
+            }
+        }
+        return c;
+    }
+
+
 }

@@ -29,6 +29,7 @@ public class Questoes extends AppCompatActivity {
     long resultado;
     long idImg;
     int idAtv;
+    String imagePath;
     String idAtvString;
     String idProfessor;
 
@@ -59,13 +60,16 @@ public class Questoes extends AppCompatActivity {
     public void inserirImagem(View view) {
         BancoController banco = new BancoController(getBaseContext());
         CriaBanco db = new CriaBanco(getBaseContext());
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        imageBitmap = ((BitmapDrawable)imagem.getDrawable()).getBitmap();
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        imagemBytes = stream.toByteArray();
+
+//        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//        imageBitmap = ((BitmapDrawable)imagem.getDrawable()).getBitmap();
+//        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+//        imagemBytes = stream.toByteArray();
+//
+//        System.out.println("Imagem em bytes: "+imagemBytes);
 
         // Chamando a função de inserção da imagem
-        resultado = banco.insereImagens(imagemBytes);
+        resultado = banco.insereImagens(imagePath);
         idImg = resultado;
         if(resultado == -1) {
             Toast.makeText(getApplicationContext(),"Erro ao inserir registro",Toast.LENGTH_LONG).show();
@@ -196,6 +200,8 @@ public class Questoes extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == TIRAR_FOTO && resultCode == RESULT_OK) {
             Uri selectedImage = intent.getData();
+            imagePath = getImagePath(selectedImage);
+            //System.out.println("Caminho imagem = "+imagePath);
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
             Cursor cursor = getContentResolver().query(selectedImage,
@@ -207,6 +213,15 @@ public class Questoes extends AppCompatActivity {
             cursor.close();
             imagem.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         }
+    }
+
+    public String getImagePath(Uri contentUri) {
+        String[] campos = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getContentResolver().query(contentUri, campos, null, null, null);
+        cursor.moveToFirst();
+        String path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
+        cursor.close();
+        return path;
     }
 
 
