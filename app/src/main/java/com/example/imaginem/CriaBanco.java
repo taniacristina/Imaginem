@@ -10,6 +10,7 @@ public class CriaBanco extends SQLiteOpenHelper {
 
     // Tabela professores
     public static final String NOME_BANCO = "imaginem.db";
+
     public static final String TABELA = "professores";
     public static final String ID = "_id";
     public static final String NOME = "nome";
@@ -19,6 +20,7 @@ public class CriaBanco extends SQLiteOpenHelper {
 
     // Tabela atividades
     public static final String TABELA_atv = "atividades";
+    public static final String ID_ATV = "_idAtv";
     public static final String TITULO = "titulo";
     public static final String DESCRICAO = "descricao";
     public static final String ID_PRO = "_idPro";
@@ -44,6 +46,13 @@ public class CriaBanco extends SQLiteOpenHelper {
     public static final String TABELA_RELACAO = "relacao";
     public static final String ID_REL = "_idRel";
 
+    // Tabela erros
+    public static final String TABELA_ERROS = "erros";
+    public static final String ID_ERRO = "_idErro";
+    public static final String ERRO1 = "erro1";
+    public static final String ERRO2 = "erro2";
+
+
     public static final int VERSAO = 2;
 
     private final Context contexto;
@@ -55,6 +64,7 @@ public class CriaBanco extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         // Tabela de professores
         String sql = "CREATE TABLE "+TABELA+"("
                 + ID + " integer primary key autoincrement,"
@@ -67,7 +77,7 @@ public class CriaBanco extends SQLiteOpenHelper {
 
         // Criando tabela de atividades
         String sql_atv = "CREATE TABLE "+TABELA_atv+"("
-                + ID + " integer primary key autoincrement,"
+                + ID_ATV + " integer primary key autoincrement,"
                 + TITULO + " text,"
                 + DESCRICAO + " text,"
                 + ID_PRO + " integer"
@@ -97,10 +107,21 @@ public class CriaBanco extends SQLiteOpenHelper {
         // Criando tabela de relação entre atividade e questão
         String sql_relacao = "CREATE TABLE "+TABELA_RELACAO+"("
                 + ID_REL + " integer primary key autoincrement,"
-                + ID_IMG + " integer,"
+                + ID_ATV + " integer,"
                 + ID_QUESTAO + " integer"
                 + ")";
         db.execSQL(sql_relacao);
+
+        // Criando tabela de palavras erradas
+        String sql_erros = "CREATE TABLE "+TABELA_ERROS+"("
+                + ID_ERRO + " integer primary key autoincrement,"
+                + ID_IMAGEM + " integer,"
+                + ID_QUESTAO + " integer,"
+                + ERRO1 + " text,"
+                + ERRO2 + " text"
+                + ")";
+        db.execSQL(sql_erros);
+
     }
 
     @Override
@@ -133,15 +154,25 @@ public class CriaBanco extends SQLiteOpenHelper {
         return "Erro";
     }
 
-    // Método para recuperar o ID da atividade
-    public String idAtividade(String usuario){
+    public Cursor buscaAtividade(String id) {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT _id FROM atividades WHERE _idPro=?",new String[]{usuario});
+        Cursor c = db.rawQuery("SELECT * FROM atividades WHERE _idAtv=?",new String[]{id});
         if(c.getCount() > 0) {
             if(c.moveToFirst()) {
-                return c.getString(c.getColumnIndexOrThrow("_id"));
+                return c;
             }
         }
-        return "erro";
+        return c;
     }
+//    // Método para recuperar o ID da atividade
+//    public String idAtividade(String usuario){
+//        SQLiteDatabase db = getReadableDatabase();
+//        Cursor c = db.rawQuery("SELECT _id FROM atividades WHERE _idPro=?",new String[]{usuario});
+//        if(c.getCount() > 0) {
+//            if(c.moveToFirst()) {
+//                return c.getString(c.getColumnIndexOrThrow("_id"));
+//            }
+//        }
+//        return "erro";
+//    }
 }

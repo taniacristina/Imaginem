@@ -41,7 +41,9 @@ public class Questoes extends AppCompatActivity {
         // Recuperando o ID do professor
         if(extras != null) {
             idProfessor = extras.getString("idProfessor");
+            idAtvString = extras.getString("idAtividade");
         }
+        idAtv = Integer.parseInt(idAtvString);
 
         // Recuperando o imageview e acionando a ação de galeria
         imagem = findViewById(R.id.imageView);
@@ -61,14 +63,6 @@ public class Questoes extends AppCompatActivity {
         imageBitmap = ((BitmapDrawable)imagem.getDrawable()).getBitmap();
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         imagemBytes = stream.toByteArray();
-
-        if(db.idAtividade(idProfessor).equals("erro")) {
-
-        } else {
-            idAtvString = db.idAtividade(idProfessor);
-        }
-
-        idAtv = Integer.parseInt(idAtvString);
 
         // Chamando a função de inserção da imagem
         resultado = banco.insereImagens(imagemBytes);
@@ -99,9 +93,11 @@ public class Questoes extends AppCompatActivity {
         String palavra3String = palavra3.getText().toString();
         String descricao3String = descricao3.getText().toString();
 
-        resultadoQuestao = banco.inserePalavras(resultado, palavra1String,descricao1String, palavra2String,descricao2String, palavra3String, descricao3String);
+        resultadoQuestao = banco.inserePalavras(idImg, palavra1String,descricao1String, palavra2String,descricao2String, palavra3String, descricao3String);
+        int resultadoQuestaoInt = (int) resultadoQuestao;
+        long resultadoRelacao = banco.insereRelacao(idAtv, resultadoQuestaoInt);
 
-        if(resultadoQuestao == -1) {
+        if(resultadoQuestao == -1 || resultadoRelacao == -1) {
             Toast.makeText(getApplicationContext(),"Erro ao inserir registro",Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(getApplicationContext(),"Registro Inserido com sucesso",Toast.LENGTH_LONG).show();
@@ -111,6 +107,7 @@ public class Questoes extends AppCompatActivity {
 
             if(extras != null) {
                 bundle.putString("idProfessor",idProfessor);
+                bundle.putString("idAtividade",idAtvString);
                 intent.putExtras(bundle);
                 startActivity(intent);
                 //Toast.makeText(Questoes.this, idProfessor,Toast.LENGTH_SHORT).show();
@@ -139,17 +136,20 @@ public class Questoes extends AppCompatActivity {
         String descricao3String = descricao3.getText().toString();
 
         resultadoQuestao = banco.inserePalavras(resultado, palavra1String,descricao1String, palavra2String,descricao2String, palavra3String, descricao3String);
+        int resultadoQuestaoInt = (int) resultadoQuestao;
+        long resultadoRelacao = banco.insereRelacao(idAtv, resultadoQuestaoInt);
 
-        if(resultadoQuestao == -1) {
+        if(resultadoQuestao == -1 || resultadoRelacao == -1) {
             Toast.makeText(getApplicationContext(),"Erro ao inserir registro",Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(getApplicationContext(),"Registro Inserido com sucesso",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this, ListaAtividades.class);
+            Intent intent = new Intent(this, Questoes.class);
             Bundle extras = getIntent().getExtras();
             Bundle bundle = new Bundle();
 
             if(extras != null) {
                 bundle.putString("idProfessor",idProfessor);
+                bundle.putString("idAtividade",idAtvString);
                 intent.putExtras(bundle);
                 startActivity(intent);
                 //Toast.makeText(Questoes.this, idProfessor,Toast.LENGTH_SHORT).show();
@@ -159,6 +159,38 @@ public class Questoes extends AppCompatActivity {
 
     }
 
+    public void voltar(View view) {
+        Intent intent= new Intent(Questoes.this, ListaAtividades.class);
+        Bundle extras = getIntent().getExtras();
+        Bundle bundle = new Bundle();
+
+        if(extras != null) {
+            bundle.putString("idProfessor",idProfessor);
+            intent.putExtras(bundle);
+            startActivity(intent);
+            //Toast.makeText(Questoes.this, idProfessor,Toast.LENGTH_SHORT).show();
+        }
+        startActivity(intent);
+    }
+
+    public void apagar(View view) {
+        EditText editText = findViewById(R.id.editText);
+        EditText editText2 = findViewById(R.id.editText2);
+        EditText editText3 = findViewById(R.id.editText3);
+        EditText editText4 = findViewById(R.id.editText4);
+        EditText editText6 = findViewById(R.id.editText6);
+        EditText editText8 = findViewById(R.id.editText8);
+        ImageView imageView = findViewById(R.id.imageView);
+
+        editText.setText(null);
+        editText2.setText(null);
+        editText3.setText(null);
+        editText4.setText(null);
+        editText6.setText(null);
+        editText8.setText(null);
+//        imageView.setImageResource(0);
+        recreate();
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);

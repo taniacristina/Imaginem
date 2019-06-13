@@ -8,7 +8,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class CadastroAtividade extends AppCompatActivity {
-    long idAtividade;
+    String idAtividade;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,6 +18,7 @@ public class CadastroAtividade extends AppCompatActivity {
 
     // Chamando a função send do botão para fazer para fazer o cadastro da atividade
     public void sendMessage(View view) {
+
         BancoController banco = new BancoController(getBaseContext());
         String idProfessor = null;
         
@@ -34,20 +36,22 @@ public class CadastroAtividade extends AppCompatActivity {
         String tituloString = titulo.getText().toString();
         String descricaoString = descricao.getText().toString();
 
-        String resultado;
+        long resultado;
 
         // Chamando a função de inserção da atividade
         resultado = banco.insereAtividade(tituloString,descricaoString,idProfessor);
+        idAtividade = String.valueOf(resultado);
 
-        if(resultado.equals("Registro Inserido com sucesso")) {
+        if(resultado != -1) {
             Bundle bundle = new Bundle();
             bundle.putString("idProfessor",idProfessor);
-            Toast.makeText(getApplicationContext(),resultado,Toast.LENGTH_LONG).show();
+            extras.putString("idAtividade",idAtividade);
+            Toast.makeText(getApplicationContext(),"Registro Inserido com sucesso",Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, Questoes.class);
             intent.putExtras(extras);
             startActivity(intent);
         } else {
-            Toast.makeText(getApplicationContext(),resultado,Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Erro ao inserir registro",Toast.LENGTH_LONG).show();
         }
 
     }
